@@ -93,13 +93,6 @@ class Task
         return $this->isDone;
     }
 
-//    public function setIsDone(bool $isDone): self
-//    {
-//        $this->isDone = $isDone;
-//
-//        return $this;
-//    }
-//
     public function toggle($flag)
     {
         $this->isDone = $flag;
