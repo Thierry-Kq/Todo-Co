@@ -8,16 +8,25 @@ use Doctrine\Persistence\ObjectManager;
 
 class TaskAndUserFixtures extends Fixture
 {
+
+    public static $tasks = [
+        'Sortir les poubelles' => 'Bien penser à trier le verre',
+        'Passer l\'aspirateur' => 'Dans la chambre et le couloir',
+        'Faire les courses' => 'Ne pas oublier le beurre',
+        'Payer le loyer' => 'Verifier que les charges sont comprises ce mois ci',
+    ];
+
     public function load(ObjectManager $manager)
     {
 
-        $task = new Task();
+        foreach (self::$tasks as $title => $content) {
 
-        $task->setContent('azerty');
-        $task->setTitle('azertyaze');
+            $task = new Task();
+            $task->setTitle($title);
+            $task->setContent($content);
 
-        // $product = new Product();
-        $manager->persist($task);
+            $manager->persist($task);
+        }
 
         $manager->flush();
     }
