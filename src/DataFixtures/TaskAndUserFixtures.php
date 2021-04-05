@@ -3,11 +3,19 @@
 namespace App\DataFixtures;
 
 use App\Entity\Task;
+use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class TaskAndUserFixtures extends Fixture
 {
+    private $passwordEncoder;
+
+    public function __construct(UserPasswordEncoderInterface $passwordEncoder)
+    {
+        $this->passwordEncoder = $passwordEncoder;
+    }
 
     public static $tasks = [
         'Sortir les poubelles' => 'Bien penser à trier le verre',
@@ -18,7 +26,6 @@ class TaskAndUserFixtures extends Fixture
 
     public function load(ObjectManager $manager)
     {
-
         foreach (self::$tasks as $title => $content) {
 
             $task = new Task();
@@ -26,6 +33,21 @@ class TaskAndUserFixtures extends Fixture
             $task->setContent($content);
 
             $manager->persist($task);
+        }
+
+        $users = ['azerty', 'admin', 'kasskq'];
+
+        foreach ($users as $username) {
+
+            $user = new User();
+            $user->setEmail($username . '@gmail.com')->setUsername($username)->setPassword(
+                $this->passwordEncoder->encodePassword(
+                    $user,
+                    'azerty'
+                )
+            );
+
+            $manager->persist($user);
         }
 
         $manager->flush();
