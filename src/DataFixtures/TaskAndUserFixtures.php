@@ -40,16 +40,16 @@ class TaskAndUserFixtures extends Fixture
         foreach ($users as $username) {
 
             $user = new User();
-            $user->setEmail($username . '@gmail.com')->setUsername($username)->setPassword(
-                $this->passwordEncoder->encodePassword(
-                    $user,
-                    'azerty'
-                )
-            );
-
+            $user->setEmail($username . '@gmail.com')
+                ->setUsername($username)
+                ->setPassword(
+                    $this->passwordEncoder->encodePassword(
+                        $user,
+                        'azerty'
+                    )
+                );
             $manager->persist($user);
         }
-
         $manager->flush();
     }
 }

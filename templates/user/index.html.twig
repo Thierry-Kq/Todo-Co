@@ -22,7 +22,6 @@
                 </thead>
                 <tbody>
                 {% for user in users %}
-                    {% dump(user) %}
                     <tr>
                         <th scope="row">{{ loop.index }}</th>
                         <td>{{ user.username }}</td>

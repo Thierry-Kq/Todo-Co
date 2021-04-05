@@ -91,6 +91,7 @@ class TaskControllerTest extends WebTestCase
     public function getTodoAndDoneTasksCount($button = null, $form = null)
     {
 
+        self::ensureKernelShutdown();
         $client = static::createClient();
         $crawler = $client->request('GET', '/tasks');
 
