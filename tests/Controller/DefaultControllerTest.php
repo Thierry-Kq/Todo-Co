@@ -16,12 +16,21 @@ class DefaultControllerTest extends WebTestCase
         $this->client = new GetClientWithLoggedUser();
     }
 
-    public function testHomepage()
+    public function testHomepageLogged()
     {
         $client = $this->client->getUser();
 
         $client->request('GET', '/');
 
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
+    }
+
+    public function testHomepageNotLogged()
+    {
+        $client = static::createClient();
+
+        $client->request('GET', '/');
+
+        $this->assertResponseRedirects('/login');
     }
 }

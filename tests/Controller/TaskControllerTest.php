@@ -46,6 +46,28 @@ class TaskControllerTest extends WebTestCase
         self::assertEquals(0, $tasks['done']);
     }
 
+    public function getTodoAndDoneTasksCount($button = null, $form = null)
+    {
+
+        self::ensureKernelShutdown();
+        $client = $this->client->getUser();
+        $crawler = $client->request('GET', '/tasks');
+
+        if ($button) {
+            $form = $crawler->filter($button)->form([], 'POST');
+            $client->submit($form);
+            $crawler = $client->followRedirect();
+        }
+
+        $tasksTodo = count($crawler->filter('span.glyphicon-remove'));
+        $tasksDone = count($crawler->filter('span.glyphicon-ok'));
+
+        return [
+            'todo' => $tasksTodo,
+            'done' => $tasksDone,
+        ];
+    }
+
     public function testCreateTask()
     {
 
@@ -96,25 +118,18 @@ class TaskControllerTest extends WebTestCase
         self::assertStringContainsString('<p>New content</p>', $crawler->outerHtml());
     }
 
-    public function getTodoAndDoneTasksCount($button = null, $form = null)
+    public function testNotLoggedRedirect()
     {
-
-        self::ensureKernelShutdown();
-        $client = $this->client->getUser();
-        $crawler = $client->request('GET', '/tasks');
-
-        if ($button) {
-            $form = $crawler->filter($button)->form([], 'POST');
-            $client->submit($form);
-            $crawler = $client->followRedirect();
-        }
-
-        $tasksTodo = count($crawler->filter('span.glyphicon-remove'));
-        $tasksDone = count($crawler->filter('span.glyphicon-ok'));
-
-        return [
-            'todo' => $tasksTodo,
-            'done' => $tasksDone,
+        $urls = [
+            '/tasks',
+            '/tasks/create',
+            '/tasks/1/edit',
         ];
+        $client = static::createClient();
+
+        foreach ($urls as $url) {
+            $client->request('GET', $url);
+            $this->assertResponseRedirects('/login');
+        }
     }
 }
