@@ -4,10 +4,18 @@
 namespace App\Tests\Controller;
 
 
+use App\Tests\Tools\GetClientWithLoggedUser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class TaskControllerTest extends WebTestCase
 {
+    private $client;
+
+    public function setUp(): void
+    {
+        $this->client = new GetClientWithLoggedUser();
+    }
+
     public function testTaskDoneTodoAndDelete()
     {
         //
@@ -41,7 +49,7 @@ class TaskControllerTest extends WebTestCase
     public function testCreateTask()
     {
 
-        $client = static::createClient();
+        $client = $this->client->getUser();
 
         $crawler = $client->request('GET', '/tasks/create');
 
@@ -62,7 +70,7 @@ class TaskControllerTest extends WebTestCase
 
     public function testEditTask()
     {
-        $client = static::createClient();
+        $client = $this->client->getUser();
 
         //
         $crawler = $client->request('GET', '/tasks');
@@ -92,7 +100,7 @@ class TaskControllerTest extends WebTestCase
     {
 
         self::ensureKernelShutdown();
-        $client = static::createClient();
+        $client = $this->client->getUser();
         $crawler = $client->request('GET', '/tasks');
 
         if ($button) {

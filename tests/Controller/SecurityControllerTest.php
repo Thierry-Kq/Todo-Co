@@ -11,7 +11,7 @@ class SecurityControllerTest extends WebTestCase
     public function testRegister()
     {
         $client = static::createClient();
-        $crawler = $client->request('GET', '/register');
+        $crawler = $client->request('GET', '/users/create');
 
         $form = $crawler->selectButton('Ajouter')->form();
 
@@ -30,7 +30,7 @@ class SecurityControllerTest extends WebTestCase
     public function testRegisterEmailAlreadyUsed()
     {
         $client = static::createClient();
-        $crawler = $client->request('GET', '/register');
+        $crawler = $client->request('GET', '/users/create');
 
         $form = $crawler->selectButton('Ajouter')->form();
 
