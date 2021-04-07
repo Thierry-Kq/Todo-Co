@@ -41,6 +41,6 @@ class SecurityControllerTest extends WebTestCase
 
         $crawler = $client->submit($form);
 
-        self::assertStringContainsString('<li>This value is already used.</li>', $crawler->outerHtml());
+        self::assertStringContainsString('<span class="form-error-message">This value is already used.</span>', $crawler->outerHtml());
     }
 }
