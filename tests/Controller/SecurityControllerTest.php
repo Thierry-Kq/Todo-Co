@@ -17,8 +17,8 @@ class SecurityControllerTest extends WebTestCase
 
         $form['registration_form[username]'] = 'userTest';
         $form['registration_form[email]'] = 'usertest@gmail.com';
-        $form['registration_form[password]'] = 'azerty';
-        $form['registration_form[agreeTerms]'] = 1;
+        $form['registration_form[password][first]'] = 'azerty';
+        $form['registration_form[password][second]'] = 'azerty';
 
         $client->submit($form);
         $crawler = $client->followRedirect();
@@ -36,8 +36,8 @@ class SecurityControllerTest extends WebTestCase
 
         $form['registration_form[username]'] = 'userTest2';
         $form['registration_form[email]'] = 'azerty@gmail.com';
-        $form['registration_form[password]'] = 'azerty';
-        $form['registration_form[agreeTerms]'] = 1;
+        $form['registration_form[password][first]'] = 'azerty';
+        $form['registration_form[password][second]'] = 'azerty';
 
         $crawler = $client->submit($form);
 
