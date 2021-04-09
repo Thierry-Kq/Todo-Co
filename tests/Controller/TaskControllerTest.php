@@ -88,6 +88,7 @@ class TaskControllerTest extends WebTestCase
 
         self::assertEquals(0, $tasksDone);
         self::assertEquals(5, $tasksTodo);
+        self::assertStringContainsString('Créé par <strong>admin</strong>', $crawler->outerHtml());
     }
 
     public function testEditTask()
