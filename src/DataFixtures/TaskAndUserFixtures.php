@@ -26,16 +26,7 @@ class TaskAndUserFixtures extends Fixture
 
     public function load(ObjectManager $manager)
     {
-        foreach (self::$tasks as $title => $content) {
-
-            $task = new Task();
-            $task->setTitle($title);
-            $task->setContent($content);
-
-            $manager->persist($task);
-        }
-
-        $users = ['azerty', 'admin', 'kasskq'];
+        $users = ['azerty', 'admin', 'kasskq', 'noob'];
 
         foreach ($users as $username) {
 
@@ -49,6 +40,20 @@ class TaskAndUserFixtures extends Fixture
                     )
                 );
             $manager->persist($user);
+        }
+
+        $count = 0;
+        foreach (self::$tasks as $title => $content) {
+
+
+            $task = new Task();
+            $task->setTitle($title);
+            $task->setContent($content);
+            if ($count < 2) {
+                $task->setUser($user);
+            }
+            $manager->persist($task);
+            $count++;
         }
         $manager->flush();
     }
