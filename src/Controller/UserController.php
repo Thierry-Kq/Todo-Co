@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\RegistrationFormType;
+use App\Manager\UserManager;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -31,18 +32,19 @@ class UserController extends AbstractController
     /**
      * @Route("/users/{id}/edit", name="user_edit")
      */
-    public function editAction(User $user, Request $request, UserPasswordEncoderInterface $encoder)
-    {
+    public function editAction(
+        User $user,
+        Request $request,
+        UserPasswordEncoderInterface $encoder,
+        UserManager $userManager
+    ) {
         $form = $this->createForm(RegistrationFormType::class, $user);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $password = $encoder->encodePassword($user, $user->getPassword());
-            $user->setPassword($password);
 
-            $this->getDoctrine()->getManager()->flush();
-
+            $userManager->persistUser($form, $user);
             $this->addFlash('success', "L'utilisateur a bien été modifié");
 
             return $this->redirectToRoute('user_list');
