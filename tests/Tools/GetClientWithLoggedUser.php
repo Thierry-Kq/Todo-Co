@@ -13,6 +13,17 @@ class GetClientWithLoggedUser extends WebTestCase
         return $client = static::createClient(
             [],
             [
+                'PHP_AUTH_USER' => 'azerty',
+                'PHP_AUTH_PW' => 'azerty',
+            ]
+        );
+    }
+
+    public function getAdmin()
+    {
+        return $client = static::createClient(
+            [],
+            [
                 'PHP_AUTH_USER' => 'admin',
                 'PHP_AUTH_PW' => 'azerty',
             ]

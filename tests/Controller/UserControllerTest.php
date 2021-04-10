@@ -4,13 +4,34 @@
 namespace App\Tests\Controller;
 
 
+use App\Tests\Tools\GetClientWithLoggedUser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class UserControllerTest extends WebTestCase
 {
+    private $client;
+
+    public function setUp(): void
+    {
+        $this->client = new GetClientWithLoggedUser();
+    }
+
+    public function testAccesDeniedIfNotAdmin()
+    {
+        $client = $this->client->getUser();
+
+        //
+        $client->request('GET', '/users/1/edit');
+        $this->assertResponseStatusCodeSame(403);
+
+        //
+        $client->request('GET', '/users');
+        $this->assertResponseStatusCodeSame(403);
+    }
+
     public function testUsersList()
     {
-        $client = static::createClient();
+        $client = $this->client->getAdmin();
 
         $crawler = $client->request('GET', '/users');
 
@@ -21,12 +42,13 @@ class UserControllerTest extends WebTestCase
 
     public function testEditUser()
     {
-        $client = static::createClient();
+        $client = $this->client->getAdmin();
 
         //
         $crawler = $client->request('GET', '/users');
         self::assertStringContainsString('<td>azerty@gmail.com</td>', $crawler->outerHtml());
-        self::assertStringNotContainsString('<td>ROLE_ADMIN, ROLE_USER</td>', $crawler->outerHtml());
+        self::assertStringNotContainsString('ROLE_ADMIN, ROLE_USER', $crawler->filter('td.test-selector')->first()->outerHtml());
+
 
         //
         $crawler = $client->request('GET', '/users/1/edit');
@@ -41,6 +63,6 @@ class UserControllerTest extends WebTestCase
         $client->submit($form);
         $crawler = $client->followRedirect();
         self::assertStringContainsString('<td>azertiti@gmail.com</td>', $crawler->outerHtml());
-        self::assertStringContainsString('<td>ROLE_ADMIN, ROLE_USER</td>', $crawler->outerHtml());
+        self::assertStringContainsString('ROLE_ADMIN, ROLE_USER', $crawler->filter('td.test-selector')->first()->outerHtml());
     }
 }

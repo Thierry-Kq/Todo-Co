@@ -39,6 +39,10 @@ class TaskAndUserFixtures extends Fixture
                         'azerty'
                     )
                 );
+
+            if ($username === 'admin') {
+                $user->setRoles(['ROLE_ADMIN']);
+            }
             $manager->persist($user);
         }
 
