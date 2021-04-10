@@ -32,9 +32,9 @@ class UserControllerTest extends WebTestCase
 
         $form = $crawler->selectButton('Modifier')->form();
         $form['registration_form[email]'] = 'azertiti@gmail.com';
-        $form['registration_form[plainPassword]'] = 'azerty';
+        $form['registration_form[password][first]'] = 'azerty';
+        $form['registration_form[password][second]'] = 'azerty';
         $form['registration_form[username]'] = 'azerty';
-        $form['registration_form[agreeTerms]'] = 1;
 
         $client->submit($form);
         $crawler = $client->followRedirect();

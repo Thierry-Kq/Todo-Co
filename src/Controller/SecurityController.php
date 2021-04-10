@@ -39,7 +39,7 @@ class SecurityController extends AbstractController
     }
 
     /**
-     * @Route("/register", name="app_register")
+     * @Route("/users/create", name="app_register")
      */
     public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder): Response
     {
@@ -52,7 +52,7 @@ class SecurityController extends AbstractController
             $user->setPassword(
                 $passwordEncoder->encodePassword(
                     $user,
-                    $form->get('plainPassword')->getData()
+                    $form->get('password')->getData()
                 )
             );
 

@@ -11,14 +11,14 @@ class SecurityControllerTest extends WebTestCase
     public function testRegister()
     {
         $client = static::createClient();
-        $crawler = $client->request('GET', '/register');
+        $crawler = $client->request('GET', '/users/create');
 
         $form = $crawler->selectButton('Ajouter')->form();
 
         $form['registration_form[username]'] = 'userTest';
         $form['registration_form[email]'] = 'usertest@gmail.com';
-        $form['registration_form[plainPassword]'] = 'azerty';
-        $form['registration_form[agreeTerms]'] = 1;
+        $form['registration_form[password][first]'] = 'azerty';
+        $form['registration_form[password][second]'] = 'azerty';
 
         $client->submit($form);
         $crawler = $client->followRedirect();
@@ -30,17 +30,17 @@ class SecurityControllerTest extends WebTestCase
     public function testRegisterEmailAlreadyUsed()
     {
         $client = static::createClient();
-        $crawler = $client->request('GET', '/register');
+        $crawler = $client->request('GET', '/users/create');
 
         $form = $crawler->selectButton('Ajouter')->form();
 
         $form['registration_form[username]'] = 'userTest2';
         $form['registration_form[email]'] = 'azerty@gmail.com';
-        $form['registration_form[plainPassword]'] = 'azerty';
-        $form['registration_form[agreeTerms]'] = 1;
+        $form['registration_form[password][first]'] = 'azerty';
+        $form['registration_form[password][second]'] = 'azerty';
 
         $crawler = $client->submit($form);
 
-        self::assertStringContainsString('<li>This value is already used.</li>', $crawler->outerHtml());
+        self::assertStringContainsString('<span class="form-error-message">This value is already used.</span>', $crawler->outerHtml());
     }
 }
