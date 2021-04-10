@@ -16,14 +16,19 @@
     </php>
 
     <testsuites>
-        <testsuite name="Project Test Suite">
+        <testsuite name="ToDO and Co">
             <directory>tests</directory>
         </testsuite>
     </testsuites>
 
     <filter>
         <whitelist processUncoveredFilesFromWhitelist="true">
-            <directory suffix=".php">src</directory>
+            <directory suffix=".php">src/Controller</directory>
+            <directory suffix=".php">src/Entity</directory>
+            <directory suffix=".php">src/Form</directory>
+            <directory suffix=".php">src/Manager</directory>
+            <directory suffix=".php">src/Repository</directory>
+            <directory suffix=".php">src/Twig</directory>
         </whitelist>
     </filter>
 
