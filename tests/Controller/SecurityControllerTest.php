@@ -11,8 +11,9 @@ class SecurityControllerTest extends WebTestCase
     public function testRegister()
     {
         $client = static::createClient();
-        $crawler = $client->request('GET', '/users/create');
 
+        //
+        $crawler = $client->request('GET', '/users/create');
         $form = $crawler->selectButton('Ajouter')->form();
 
         $form['registration_form[username]'] = 'userTest';
@@ -25,6 +26,23 @@ class SecurityControllerTest extends WebTestCase
 
         self::assertStringContainsString('<td>userTest</td>', $crawler->outerHtml());
         self::assertStringContainsString('<td>usertest@gmail.com</td>', $crawler->outerHtml());
+        self::assertStringNotContainsString('<td>ROLE_ADMIN, ROLE_USER</td>', $crawler->outerHtml());
+
+        $crawler = $client->request('GET', '/users/create');
+        $form = $crawler->selectButton('Ajouter')->form();
+
+        $form['registration_form[username]'] = 'userTest2';
+        $form['registration_form[email]'] = 'usertest2@gmail.com';
+        $form['registration_form[password][first]'] = 'azerty';
+        $form['registration_form[password][second]'] = 'azerty';
+        $form['registration_form[role]'] = 'ROLE_ADMIN';
+
+        $client->submit($form);
+        $crawler = $client->followRedirect();
+
+        self::assertStringContainsString('<td>userTest2</td>', $crawler->outerHtml());
+        self::assertStringContainsString('<td>usertest2@gmail.com</td>', $crawler->outerHtml());
+        self::assertStringContainsString('<td>ROLE_ADMIN, ROLE_USER</td>', $crawler->outerHtml());
     }
 
     public function testRegisterEmailAlreadyUsed()
