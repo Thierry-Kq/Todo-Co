@@ -26,7 +26,7 @@ class TaskAndUserFixtures extends Fixture
 
     public function load(ObjectManager $manager)
     {
-        $users = ['azerty', 'admin', 'kasskq', 'noob'];
+        $users = ['azerty', 'admin', 'kasskq', 'userWithoutTask', 'noob'];
 
         foreach ($users as $username) {
 
@@ -39,6 +39,10 @@ class TaskAndUserFixtures extends Fixture
                         'azerty'
                     )
                 );
+
+            if ($username === 'admin') {
+                $user->setRoles(['ROLE_ADMIN']);
+            }
             $manager->persist($user);
         }
 
