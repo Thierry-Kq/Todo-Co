@@ -29,4 +29,26 @@ class GetClientWithLoggedUser extends WebTestCase
             ]
         );
     }
+
+    public function getUserWithoutTask()
+    {
+        return $client = static::createClient(
+            [],
+            [
+                'PHP_AUTH_USER' => 'userWithoutTask',
+                'PHP_AUTH_PW' => 'azerty',
+            ]
+        );
+    }
+
+    public function getUserWithTask()
+    {
+        return $client = static::createClient(
+            [],
+            [
+                'PHP_AUTH_USER' => 'noob',
+                'PHP_AUTH_PW' => 'azerty',
+            ]
+        );
+    }
 }

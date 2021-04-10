@@ -16,7 +16,7 @@ class TaskControllerTest extends WebTestCase
         $this->client = new GetClientWithLoggedUser();
     }
 
-    public function testTaskDoneTodoAndDelete()
+    public function testTaskDoneAndTodo()
     {
         //
         $tasks = self::getTodoAndDoneTasksCount();
@@ -24,25 +24,19 @@ class TaskControllerTest extends WebTestCase
         self::assertEquals(4, $tasks['todo']);
         self::assertEquals(0, $tasks['done']);
 
-        //
-        $button = 'button:contains("Supprimer")';
-        $tasks = self::getTodoAndDoneTasksCount($button);
-
-        self::assertEquals(3, $tasks['todo']);
-        self::assertEquals(0, $tasks['done']);
 
         //
         $button = 'button:contains("Marquer comme faite")';
         $tasks = self::getTodoAndDoneTasksCount($button);
 
-        self::assertEquals(2, $tasks['todo']);
+        self::assertEquals(3, $tasks['todo']);
         self::assertEquals(1, $tasks['done']);
 
         //
         $button = 'button:contains("Marquer non terminée")';
         $tasks = self::getTodoAndDoneTasksCount($button);
 
-        self::assertEquals(3, $tasks['todo']);
+        self::assertEquals(4, $tasks['todo']);
         self::assertEquals(0, $tasks['done']);
     }
 
@@ -132,5 +126,48 @@ class TaskControllerTest extends WebTestCase
             $client->request('GET', $url);
             $this->assertResponseRedirects('/login');
         }
+    }
+
+    public function testTaskDelete()
+    {
+        $button = 'button:contains("Supprimer")';
+
+        //
+        $client = $this->client->getUserWithoutTask();
+        $crawler = $client->request('GET', '/tasks');
+
+        self::assertSame(0, $crawler->filter($button)->count());
+
+        //
+        self::ensureKernelShutdown();
+        $client = $this->client->getUserWithTask();
+
+        $crawler = $client->request('GET', '/tasks');
+        self::assertSame(2, $crawler->filter($button)->count());
+
+        for ($i = 0; $i < 2; $i++) {
+            $crawler = $client->request('GET', '/tasks');
+
+            $form = $crawler->filter($button)->form([], 'POST');
+            $client->submit($form);
+        }
+        $crawler = $client->request('GET', '/tasks');
+        self::assertSame(0, $crawler->filter($button)->count());
+
+        //
+        self::ensureKernelShutdown();
+        $client = $this->client->getAdmin();
+
+        $crawler = $client->request('GET', '/tasks');
+        self::assertSame(2, $crawler->filter($button)->count());
+
+        for ($i = 0; $i < 2; $i++) {
+            $crawler = $client->request('GET', '/tasks');
+
+            $form = $crawler->filter($button)->form([], 'POST');
+            $client->submit($form);
+        }
+        $crawler = $client->request('GET', '/tasks');
+        self::assertSame(0, $crawler->filter($button)->count());
     }
 }

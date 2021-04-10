@@ -26,7 +26,7 @@ class TaskAndUserFixtures extends Fixture
 
     public function load(ObjectManager $manager)
     {
-        $users = ['azerty', 'admin', 'kasskq', 'noob'];
+        $users = ['azerty', 'admin', 'kasskq', 'userWithoutTask', 'noob'];
 
         foreach ($users as $username) {
 
