@@ -26,6 +26,7 @@ class UserControllerTest extends WebTestCase
         //
         $crawler = $client->request('GET', '/users');
         self::assertStringContainsString('<td>azerty@gmail.com</td>', $crawler->outerHtml());
+        self::assertStringNotContainsString('<td>ROLE_ADMIN, ROLE_USER</td>', $crawler->outerHtml());
 
         //
         $crawler = $client->request('GET', '/users/1/edit');
@@ -35,9 +36,11 @@ class UserControllerTest extends WebTestCase
         $form['registration_form[password][first]'] = 'azerty';
         $form['registration_form[password][second]'] = 'azerty';
         $form['registration_form[username]'] = 'azerty';
+        $form['registration_form[role]'] = 'ROLE_ADMIN';
 
         $client->submit($form);
         $crawler = $client->followRedirect();
         self::assertStringContainsString('<td>azertiti@gmail.com</td>', $crawler->outerHtml());
+        self::assertStringContainsString('<td>ROLE_ADMIN, ROLE_USER</td>', $crawler->outerHtml());
     }
 }
