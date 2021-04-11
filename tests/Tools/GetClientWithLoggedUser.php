@@ -10,7 +10,7 @@ class GetClientWithLoggedUser extends WebTestCase
 {
     public function getUser()
     {
-        return $client = static::createClient(
+        return static::createClient(
             [],
             [
                 'PHP_AUTH_USER' => 'azerty',
@@ -21,7 +21,7 @@ class GetClientWithLoggedUser extends WebTestCase
 
     public function getAdmin()
     {
-        return $client = static::createClient(
+        return static::createClient(
             [],
             [
                 'PHP_AUTH_USER' => 'admin',
@@ -32,7 +32,7 @@ class GetClientWithLoggedUser extends WebTestCase
 
     public function getUserWithoutTask()
     {
-        return $client = static::createClient(
+        return static::createClient(
             [],
             [
                 'PHP_AUTH_USER' => 'userWithoutTask',
@@ -43,7 +43,7 @@ class GetClientWithLoggedUser extends WebTestCase
 
     public function getUserWithTask()
     {
-        return $client = static::createClient(
+        return static::createClient(
             [],
             [
                 'PHP_AUTH_USER' => 'noob',
