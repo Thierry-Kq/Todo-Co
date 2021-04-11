@@ -25,6 +25,8 @@ class UserManager
     {
         if ($form->get('role')->getData() === 'ROLE_ADMIN') {
             $user->setRoles(['ROLE_ADMIN']);
+        } else {
+            $user->setRoles([]);
         }
         $user->setPassword(
             $this->passwordEncoder->encodePassword(

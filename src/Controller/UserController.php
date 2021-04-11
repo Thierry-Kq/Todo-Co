@@ -5,12 +5,10 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\RegistrationFormType;
 use App\Manager\UserManager;
-use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class UserController extends AbstractController
 {
@@ -35,7 +33,6 @@ class UserController extends AbstractController
     public function editAction(
         User $user,
         Request $request,
-        UserPasswordEncoderInterface $encoder,
         UserManager $userManager
     ) {
         $form = $this->createForm(RegistrationFormType::class, $user);
