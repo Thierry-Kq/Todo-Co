@@ -17,5 +17,5 @@
 ###< symfony/phpunit-bridge ###
 
 ###> code coverage
-TestCoverage
+#TestCoverage
 ###< code coverage
