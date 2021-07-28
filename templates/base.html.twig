@@ -32,8 +32,6 @@
 
             <img src="{{ asset('img/Logo_OpenClassrooms.png') }}" alt="OpenClassrooms"/>
 
-            {# <a class="navbar-brand" href="{{ path('user_list') }}">Users list</a> #}
-
 
         </div>
     </div>
@@ -41,8 +39,12 @@
 
 <!-- Page Content -->
 <div class="container">
-    <div class="row">
-        <a href="{{ path('app_register') }}" class="btn btn-primary">Créer un utilisateur</a>
+    <div class="row" style="margin-bottom: 3em">
+
+        {% if is_granted('ROLE_ADMIN') %}
+            <a href="{{ path('app_register') }}" class="btn btn-primary">Créer un utilisateur</a>
+            <a href="{{ path('user_list') }}" class="btn btn-primary">Gestion des utilisateurs</a>
+        {% endif %}
 
         {% if app.user %}
             <a href="{{ path('app_logout') }}" class="pull-right btn btn-danger">Se déconnecter</a>
@@ -76,7 +78,15 @@
 
     <div class="row">
         <div class="col-md-12">
-            {% block body %}{% endblock %}
+            {% block body %}
+                <div class="row" style="margin-bottom: 3em">
+                    <a href="{{ path('task_create') }}" class="btn btn-success">Créer une nouvelle tâche</a>
+                    <a href="{{ path('task_list') }}" class="btn btn-info">Consulter la liste de toutes les tâches</a>
+                    <a href="{{ path('task_todo') }}" class="btn btn-info">Consulter la liste des tâches à faire</a>
+                    <a href="{{ path('task_done') }}" class="btn btn-info">Consulter la liste des tâches terminées</a>
+                </div>
+
+            {% endblock %}
         </div>
     </div>
 </div>

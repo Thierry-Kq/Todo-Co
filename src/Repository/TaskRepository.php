@@ -19,22 +19,22 @@ class TaskRepository extends ServiceEntityRepository
         parent::__construct($registry, Task::class);
     }
 
-    // /**
-    //  * @return Task[] Returns an array of Task objects
-    //  */
-    /*
-    public function findByExampleField($value)
+
+    public function findTasksDone()
     {
         return $this->createQueryBuilder('t')
-            ->andWhere('t.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('t.id', 'ASC')
-            ->setMaxResults(10)
+            ->andWhere('t.isDone = 1')
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
     }
-    */
+
+    public function findTasksTodo()
+    {
+        return $this->createQueryBuilder('t')
+            ->andWhere('t.isDone = 0')
+            ->getQuery()
+            ->getResult();
+    }
 
     /*
     public function findOneBySomeField($value): ?Task

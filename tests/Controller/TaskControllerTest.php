@@ -117,6 +117,8 @@ class TaskControllerTest extends WebTestCase
     {
         $urls = [
             '/tasks',
+            '/tasks/todo',
+            '/tasks/done',
             '/tasks/create',
             '/tasks/1/edit',
         ];
@@ -170,4 +172,49 @@ class TaskControllerTest extends WebTestCase
         $crawler = $client->request('GET', '/tasks');
         self::assertSame(0, $crawler->filter($button)->count());
     }
+
+    public function testTodoAndDonePages()
+    {
+        $client = $this->client->getUser();
+
+        //
+        $crawler = $client->request('GET', '/tasks/done');
+
+        $tasksTodo = count($crawler->filter('span.glyphicon-remove'));
+        $tasksDone = count($crawler->filter('span.glyphicon-ok'));
+
+        self::assertEquals(0, $tasksDone);
+        self::assertEquals(0, $tasksTodo);
+
+        //
+        $crawler = $client->request('GET', '/tasks/todo');
+
+        $tasksTodo = count($crawler->filter('span.glyphicon-remove'));
+        $tasksDone = count($crawler->filter('span.glyphicon-ok'));
+
+        self::assertEquals(0, $tasksDone);
+        self::assertEquals(4, $tasksTodo);
+
+        //
+        $button = 'button:contains("Marquer comme faite")';
+        $form = $crawler->filter($button)->form([], 'POST');
+        $client->submit($form);
+
+        $crawler = $client->request('GET', '/tasks/todo');
+
+        $tasksTodo = count($crawler->filter('span.glyphicon-remove'));
+        $tasksDone = count($crawler->filter('span.glyphicon-ok'));
+
+        self::assertEquals(0, $tasksDone);
+        self::assertEquals(3, $tasksTodo);
+
+        $crawler = $client->request('GET', '/tasks/done');
+
+        $tasksTodo = count($crawler->filter('span.glyphicon-remove'));
+        $tasksDone = count($crawler->filter('span.glyphicon-ok'));
+
+        self::assertEquals(1, $tasksDone);
+        self::assertEquals(0, $tasksTodo);
+    }
+
 }
