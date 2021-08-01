@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Entity\Task;
 use App\Form\TaskType;
-use App\Manager\TaskManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -89,19 +88,15 @@ class TaskController extends AbstractController
     /**
      * @Route("/tasks/{id}/delete", name="task_delete")
      */
-    public function deleteTaskAction(Task $task, TaskManager $taskManager)
+    public function deleteTaskAction(Task $task)
     {
         $em = $this->getDoctrine()->getManager();
 
-        if ($taskManager->allowDeleteTask($task)) {
-            $em->remove($task);
-            $em->flush();
-            $this->addFlash('success', 'La tâche a bien été supprimée.');
+        $this->denyAccessUnlessGranted('delete', $task);
 
-            return $this->redirectToRoute('task_list');
-        }
-
-        $this->addFlash('error', 'Vous ne pouvez pas faire cela');
+        $em->remove($task);
+        $em->flush();
+        $this->addFlash('success', 'La tâche a bien été supprimée.');
 
         return $this->redirectToRoute('task_list');
     }
