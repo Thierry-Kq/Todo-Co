@@ -92,11 +92,16 @@ class TaskController extends AbstractController
     {
         $em = $this->getDoctrine()->getManager();
 
-        $this->denyAccessUnlessGranted('delete', $task);
+        if ($this->isGranted('delete', $task)) {
 
-        $em->remove($task);
-        $em->flush();
-        $this->addFlash('success', 'La tâche a bien été supprimée.');
+            $em->remove($task);
+            $em->flush();
+            $this->addFlash('success', 'La tâche a bien été supprimée.');
+
+            return $this->redirectToRoute('task_list');
+        }
+
+        $this->addFlash('error', 'Vous ne pouvez pas faire cela');
 
         return $this->redirectToRoute('task_list');
     }
